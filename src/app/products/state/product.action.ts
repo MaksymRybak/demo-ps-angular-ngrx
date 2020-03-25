@@ -47,4 +47,5 @@ export class LoadFail implements Action {
   constructor(public payload: string) { }
 }
 
-export type ProductActions = ToggleProductCode | SetCurrentProduct | ClearCurrentProduct | InitializeCurrentProduct;
+export type ProductActions = ToggleProductCode | SetCurrentProduct | ClearCurrentProduct | InitializeCurrentProduct |
+                             Load | LoadSuccess | LoadFail;
