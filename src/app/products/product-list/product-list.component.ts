@@ -1,18 +1,18 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { Product } from '../product';
 import { ProductService } from '../product.service';
 import { Store, select } from '@ngrx/store';
 import * as fromProduct from '../state/product.reducer';
 import * as productActions from '../state/product.action';
-import { takeWhile } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'pm-product-list',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css']
 })
-export class ProductListComponent implements OnInit, OnDestroy {
+export class ProductListComponent implements OnInit {
   pageTitle = 'Products';
   errorMessage: string;
 
@@ -22,7 +22,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   // Used to highlight the selected product in the list
   selectedProduct: Product | null;
-  componentActive: boolean;
+  products$: Observable<Product[]>;
 
   constructor(private productService: ProductService, private store: Store<fromProduct.State>) { }
 
@@ -31,12 +31,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.store.pipe(select(fromProduct.getCurrentProduct)).subscribe(currentProduct => this.selectedProduct = currentProduct);
 
     this.store.dispatch(new productActions.Load());
-    this.store.pipe(select(fromProduct.getProducts), takeWhile(() => this.componentActive))
-      .subscribe((products: Product[]) => this.products = products);
-    // this.productService.getProducts().subscribe({
-    //   next: (products: Product[]) => this.products = products,
-    //   error: (err: any) => this.errorMessage = err.error
-    // });
+    this.products$ = this.store.pipe(select(fromProduct.getProducts));
 
     // TODO: unsubscribe
     this.store.pipe(select(fromProduct.getShowProductCode)).subscribe(
@@ -44,10 +39,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
           this.displayCode = showProductCode;
       }
     );
-  }
-
-  ngOnDestroy(): void {
-    this.componentActive = false;
   }
 
   checkChanged(value: boolean): void {
