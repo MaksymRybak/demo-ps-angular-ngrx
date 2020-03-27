@@ -23,6 +23,7 @@ export class ProductListComponent implements OnInit {
   // Used to highlight the selected product in the list
   selectedProduct: Product | null;
   products$: Observable<Product[]>;
+  errorMessage$: Observable<string>;
 
   constructor(private productService: ProductService, private store: Store<fromProduct.State>) { }
 
@@ -30,6 +31,7 @@ export class ProductListComponent implements OnInit {
     // TODO: unsubscribe
     this.store.pipe(select(fromProduct.getCurrentProduct)).subscribe(currentProduct => this.selectedProduct = currentProduct);
 
+    this.errorMessage$ = this.store.pipe(select(fromProduct.getError));
     this.store.dispatch(new productActions.Load());
     this.products$ = this.store.pipe(select(fromProduct.getProducts));
 
