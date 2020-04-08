@@ -95,6 +95,18 @@ export function reducer(state = initialState, action: ProductActions): ProductSt
         products: [],
         error: action.payload
       };
+    case ProductActionTypes.UpdateProductSuccess:
+      const updatedProducts = state.products.map(product => product.id === action.payload.id ? action.payload : product);
+      return {
+        ...state,
+        products: updatedProducts,
+        error: ''
+      };
+    case ProductActionTypes.UpdateProductFail:
+      return {
+        ...state,
+        error: action.payload
+      };
     default:
         return state;
   }
