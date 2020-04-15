@@ -7,7 +7,7 @@ import { GenericValidator } from '../../shared/generic-validator';
 import { NumberValidators } from '../../shared/number.validator';
 import { Store, select } from '@ngrx/store';
 
-import * as fromProduct from '../state/product.reducer';
+import * as fromProduct from '../state';
 import * as productActions from '../state/product.action';
 
 @Component({
@@ -27,7 +27,7 @@ export class ProductEditComponent implements OnInit, OnDestroy {
   private validationMessages: { [key: string]: { [key: string]: string } };
   private genericValidator: GenericValidator;
 
-  constructor(private fb: FormBuilder, private productService: ProductService, private store: Store<fromProduct.ProductState>) {
+  constructor(private fb: FormBuilder, private productService: ProductService, private store: Store<fromProduct.State>) {
 
     // Defines all of the validation messages for the form.
     // These could instead be retrieved from a file or database.
