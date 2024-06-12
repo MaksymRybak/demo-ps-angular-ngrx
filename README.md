@@ -1,4 +1,4 @@
-# APM-Demo0
+# Angular NgRx app
 
 Starter files with no NgRx added.
 
